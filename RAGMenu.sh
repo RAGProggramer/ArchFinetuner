@@ -20,7 +20,7 @@ do
     echo " 10 - Programas Essenciais ";
     echo " 11 - Instalar thema dedsec ";
     echo " 12 - Instalar Wallpaper Engine ";
-    echo " q - Sair  ";
+    echo "  q - Sair  ";
 
         read -r opcao;
 
@@ -63,8 +63,9 @@ do
     ;;
     q) 
     exit;
+    rm -rf "$DIR";
     ;;    
-    *)
+    *)rm -rf ~/"$DIR"
         echo "Opção inválida";
         ;;
     esac

@@ -1,7 +1,70 @@
 #! /usr/bin/bash
 
-cabecalho ( ) {
+YAY_APP_INSTALL=(
+    vscode 
+    mysql-workbench 
+    xampp 
+    discord 
+    balena-etcher 
+    steam 
+    heroic-games-launcher 
+    lutris 
+    anydesk
+    obs-studio 
+    kdenlive 
+    spotify 
+    github-desktop 
+    whatsapp-for-linux-git 
+    piper-git
+)
 
+PACMAN_APP_INSTALL=(
+    plasma-desktop
+    plasma-wayland-session
+    plasma-nm plasma-framework
+    ffmpegthumbnailer
+    ffmpegthumbs plasma-pa
+    kate
+    gwenview
+    kscreen
+    powerdevil 
+    noto-fonts-emoji 
+    sddm tilix dolphin 
+    dolphin-plugins 
+    spectacle 
+    plasma-integration 
+    plasma-workspace 
+    kded 
+    kwayland 
+    kwayland-integration 
+    systemsettings 
+    plasma-workspace-wallpapers  
+    ntfs-3g 
+    ark 
+    ffmpeg 
+    gst-plugins-ugly 
+    gst-plugins-good 
+    gst-plugins-base 
+    gst-plugins-bad 
+    gst-libav 
+    gstreamer 
+    btrfs-progs 
+    kio-gdrive 
+    neofetch 
+    htop 
+    ark 
+    grub-customizer 
+    gufw 
+    fwupd 
+    xorg-server 
+    xorg-xinit 
+    xorg-apps 
+    mesa
+    zsh 
+    zsh-completions
+)
+
+cabecalho ( ) {
 echo "                                                                                                                       ";
 echo "    ██████╗  █████╗  ██████╗     ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗          █████╗ ██████╗ ██████╗     ";
 echo "    ██╔══██╗██╔══██╗██╔════╝     ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║         ██╔══██╗██╔══██╗██╔══██╗    ";
@@ -10,7 +73,6 @@ echo "    ██╔══██╗██╔══██║██║   ██║ 
 echo "    ██║  ██║██║  ██║╚██████╔╝    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗    ██║  ██║██║     ██║         ";
 echo "    ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝     ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝╚═╝     ╚═╝         ";
 echo "                                                                                                                       ";
-
 }
 
 #essa função instala o paru
@@ -26,7 +88,7 @@ makepkg -si;
 #essa função instala o YAY
 IntalarYAY (){
 cd "$DIR" || exit;
-sudo pacman -S --needed git base-devel
+sudo pacman -S --needed git base-devel;
 git clone https://aur.archlinux.org/yay.git;
 cd yay || exit;
 makepkg -si;
@@ -37,9 +99,8 @@ ADDrepoChaotic () {
     sudo pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com;
     sudo pacman-key --lsign-key FBA220DFC880C036;
     sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst';
+     cat > /etc/pacman.conf<< "EOF" 
 
-cat > /etc/pacman.conf << "EOF" 
-    
     [chaotic-aur]
     Include = /etc/pacman.d/chaotic-mirrorlist
 
@@ -79,19 +140,13 @@ Intalarxanmod ( ) {
     grub-mkconfig -o /boot/grub/grub.cfg;
 }
 
-instlarapps (){
-    sudo pacman -S plasma-desktop plasma-wayland-session plasma-nm plasma-framework ffmpegthumbnailer ffmpegthumbs plasma-pa kate gwenview kscreen powerdevil noto-fonts-emoji sddm tilix dolphin; 
-    sudo pacman -S dolphin-plugins spectacle plasma-integration plasma-workspace kded kwayland kwayland-integration systemsettings plasma-workspace-wallpapers  ntfs-3g ark ffmpeg gst-plugins-ugly; 
-    sudo pacman -S gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer btrfs-progs kio-gdrive neofetch htop ark grub-customizer;
-    sudo pacman -S gufw fwupd xorg-server xorg-xinit xorg-apps mesa;
 
-}
 driversGraficos(){
     echo "escolha a opção que coresponde com seu hardware!";
     echo "1 - AMD   ";
     echo "2 - INTEL ";
     echo "3 - NVIDIA";
- opcao="";
+ read -r opcao;
 case $opcao in
 
 1)
@@ -116,7 +171,7 @@ installnavegador(){
     echo "1 - google-chrome";
     echo "1 - firefox";
     echo "q - para sair";
-opcao=""
+ read -r opcao;
 case $opcao in
  
 1)
@@ -129,14 +184,13 @@ yay -S microsoft-edge-stable-bin;
 yay -S google-chrome;
 ;;
 4)
-yay -S irefox;
+yay -S firefox;
 ;;
 esac
 
 }
 
 zsheplugins(){
-    sudo pacman -S zsh zsh-completions;
     cd "$DIR" || exit;
     #bash-syntax
     git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/plugins/zsh-autosuggestions;
@@ -148,12 +202,26 @@ zsheplugins(){
     sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)";
 }
 
-progesential(){
+progesential () {
 
-yay -S vscode mysql-workbench xampp discord balena-etcher steam heroic-games-launcher lutris anydesk;
-yay -S obs-studio kdenlive spotify github-desktop whatsapp-for-linux-git piper-git;
-
+for pacote in ${YAY_APP_INSTALL[@]}; do
+    if ! yay -Q | grep -q "$pacote"; then  
+    yay -S "$pacote"; 
+    else 
+    echo "[INFO] - O pacote $pacote já está instalado";
+    fi
+done;
 }
+instlarapps (){
+    for programa in ${PACMAN_APP_INSTALL[@]}; do
+        if ! pacman -Q | grep -q "$programa"; then  
+            sudo pacman -S "$programa"; 
+        else 
+             echo "[INFO] - O pacote $pacote já está instalado";
+        fi;
+    done;
+}
+
 grubtheme() {
 cd "$DIR" || exit;
 git clone --depth 1 https://gitlab.com/VandalByte/dedsec-grub-theme.git && cd dedsec-grub-theme || exit;

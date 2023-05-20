@@ -1,4 +1,6 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
+# shellcheck source=/dev/null
+
 ################################################################################
 # Nome do programa: RAG INSTALL APP 
 # Autor: Gabriel Aguiar Rocha
@@ -12,11 +14,13 @@
 # formatar seu sistema ter que ficar digitando o nome e tal.  
 #
 ################################################################################
-# shellcheck source=/dev/null
+
 source RAGFunções.sh;
 source RAGMenu.sh;
 
 intmain(){
+
+    clear;
 
     cabecalho;
 
