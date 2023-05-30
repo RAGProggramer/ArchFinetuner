@@ -1,7 +1,11 @@
-#! /usr/bin/bash
+#! /usr/bin/env bash
+
+#-----------------------------------------| Váriaveis|-------------------------------------------------#
+DIR="$HOME/.RAGlog";
+export DIR;
 
 YAY_APP_INSTALL=(
-    vscode 
+    visual-studio-code-bin
     mysql-workbench 
     xampp 
     discord 
@@ -15,21 +19,28 @@ YAY_APP_INSTALL=(
     spotify 
     github-desktop 
     whatsapp-for-linux-git 
-    piper-git
+    piper
+    portmaster-stub-bin
 )
 
 PACMAN_APP_INSTALL=(
+    wget
+    nano
     plasma-desktop
     plasma-wayland-session
-    plasma-nm plasma-framework
+    plasma-nm 
+    plasma-framework
     ffmpegthumbnailer
-    ffmpegthumbs plasma-pa
+    ffmpegthumbs 
+    plasma-pa
     kate
     gwenview
     kscreen
     powerdevil 
     noto-fonts-emoji 
-    sddm tilix dolphin 
+    sddm 
+    tilix 
+    dolphin 
     dolphin-plugins 
     spectacle 
     plasma-integration 
@@ -62,8 +73,84 @@ PACMAN_APP_INSTALL=(
     mesa
     zsh 
     zsh-completions
+    base-devel 
+    git
+    plasma-framework 
+    gst-libav 
+    base-devel   
+    qt5-webchannel 
+    vulkan-headers 
+    pulseaudio 
+    alsa-utils
 )
 
+DRIVERS_GRAFIC_INSTAL_AMD=(
+lib32-mesa 
+vulkan-radeon 
+lib32-vulkan-radeon 
+vulkan-icd-loader 
+lib32-vulkan-icd-loader
+)
+
+DRIVERS_GRAFIC_INSTAL_INTEL=(
+lib32-mesa 
+vulkan-intel 
+lib32-vulkan-intel 
+vulkan-icd-loader 
+lib32-vulkan-icd-loader
+)
+
+DRIVERS_GRAFIC_INSTAL_NVIDIA=(
+nvidia-dkms 
+nvidia-utils 
+lib32-nvidia-utils 
+nvidia-settings 
+vulkan-icd-loader 
+lib32-vulkan-icd-loader
+)
+
+PAC=(
+    base-devel 
+    git
+)
+
+VERMELHO='\e[1;91m';
+VERDE='\e[1;92m';
+SEM_COR='\e[0m';
+
+#------------------------------------------| Testes/Atualização |------------------------------------------------#
+
+verifiDepScript(){
+    if ! ping -c 1 8.8.8.8 -q &> /dev/null; then
+    echo -e "${VERMELHO}[ERROR] - Seu computador não tem conexão com a internet.${SEM_COR}";
+
+    exit 1;
+    else
+    echo -e "${VERDE}[INFO] - Conexão com a internet funcionando normalmente.${SEM_COR}"; 
+    fi
+
+    echo -e "${VERDE}[INFO] - Atualizando pacotes Pacman...${SEM_COR}";
+    sudo pacman -Syu --noconfirm;
+    
+    echo "                                          ";
+
+    echo -e "${VERDE}[INFO] - Atualizando pacotes YAY...${SEM_COR}";
+    yay -Syu --noconfirm;
+    
+
+
+
+    for programa in ${PAC[@]}; do
+
+        if ! pacman -Q | grep -q "$programa"; then  
+        echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}";
+            sudo pacman -S "$programa" --noconfirm; 
+        else 
+             echo -e "${VERDE}[INFO] - O pacote $programa já está instalado.${SEM_COR}";
+        fi;
+    done;
+}
+#-------------------------------------------| Funções |-----------------------------------------------#
 cabecalho ( ) {
 echo "                                                                                                                       ";
 echo "    ██████╗  █████╗  ██████╗     ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗          █████╗ ██████╗ ██████╗     ";
@@ -76,29 +163,42 @@ echo "                                                                          
 }
 
 #essa função instala o paru
-IntalarParu (){
-cd "$DIR" || exit ;
-sudo pacman -S base-devel git;
-git clone https://aur.archlinux.org/paru.git;
-cd paru || exit;
-makepkg -si;
+InstalarParu (){
+cd "$DIR";
+if [ -f "$DIR/paru" ]; then
+    echo -e "${VERDE}[INFO] - O arquivo já existe.${SEM_COR}"
+else
+    echo -e "${VERDE}[INFO] - Instalando gerenciador de pacotes paru...${SEM_COR}";
+    echo "  ";
+    git clone https://aur.archlinux.org/paru.git;
+    cd paru;
+    makepkg -si;
+fi
+
 
 }
 
 #essa função instala o YAY
-IntalarYAY (){
-cd "$DIR" || exit;
-sudo pacman -S --needed git base-devel;
-git clone https://aur.archlinux.org/yay.git;
-cd yay || exit;
-makepkg -si;
+InstalarYAY (){
+cd "$DIR";
+if [ -f "$DIR/yay" ]; then
+    echo -e "${VERDE}O arquivo já existe.${SEM_COR}"
+else
+    echo -e "${VERDE}[INFO] - Instalando gerenciador de pacotes yay...${SEM_COR}";
+    git clone https://aur.archlinux.org/yay.git;
+    cd yay;
+    makepkg -si;
+fi
+
 
 }
 #essa função  adiciona o repitorio chaotic-aur
 ADDrepoChaotic () {
+    echo -e "${VERDE}[INFO] - Adicionando Repositorios e Mirros do Chaotic.${SEM_COR}";
     sudo pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com;
     sudo pacman-key --lsign-key FBA220DFC880C036;
     sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst';
+    
      cat > /etc/pacman.conf<< "EOF" 
 
     [chaotic-aur]
@@ -108,16 +208,13 @@ ADDrepoChaotic () {
     include=/etc/pacman.d/mirrorlist
 
 EOF
-
 }
 #essa função verifica se o diretorio log/downloads do nosso script funciona
 verifDirExit () {
-    
-DIR="$HOME/.RAGlog";
-export DIR
+
 # Verifica se o diretório já existe
 if [[ -d "$DIR" ]]; then
-    echo "O diretório $DIR já existe"
+    echo -e "${VERDE}[INFO] - O diretório $DIR já existe.${SEM_COR}"
     else
          # Exibe uma mensagem animada de criação do diretório
         echo "Criando diretório $DIR"
@@ -130,120 +227,198 @@ if [[ -d "$DIR" ]]; then
          # Cria o diretório
          mkdir "$DIR";
     # Exibe uma mensagem de conclusão
-    echo "Diretório $DIR criado com sucesso";
+    echo -e "${VERDE}[INFO] - Diretório $DIR criado com sucesso!${SEM_COR}";
 fi;
-
 }
 
 Intalarxanmod ( ) {
-    sudo pacman -S linux-xanmod linux-xanmod-headers;
+    pacotelinuxxanmod=(
+        linux-xanmod 
+        linux-xanmod-headers
+    )
+    for pacote in ${pacotelinuxxanmod[@]}; do
+    if ! pacman -Q | grep -q "$pacote"; then  
+    echo -e "${VERDE}[INFO] - Instalando Kernel XanMod.${SEM_COR}";
+    sudo pacman -S "$pacote" --noconfirm; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado.${SEM_COR}";
+    fi
+done;
     grub-mkconfig -o /boot/grub/grub.cfg;
 }
 
-
 driversGraficos(){
-    echo "escolha a opção que coresponde com seu hardware!";
+    echo "escolha a opção que coresponde com seu hardware:";
     echo "1 - AMD   ";
     echo "2 - INTEL ";
     echo "3 - NVIDIA";
- read -r opcao;
+    echo "q - sair";
+ read -rp "opção: " opcao;
 case $opcao in
 
 1)
-sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader;
+for pacote in ${DRIVERS_GRAFIC_INSTAL_AMD[@]}; do
+    if ! pacman -Q | grep -q "$pacote"; then  
+     echo -e "${VERDE}[INFO] - Instalando o $pacote...${SEM_COR}";
+    sudo pacman -S "$pacote" --noconfirm; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado.${SEM_COR}";
+    fi
+done;
 ;;
 2)
-sudo pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader;
+for pacote in ${DRIVERS_GRAFIC_INSTAL_INTEL[@]}; do
+    if ! pacman -Q | grep -q "$pacote"; then  
+    echo -e "${VERDE}[INFO] - Instalando o $pacote...${SEM_COR}";
+    sudo pacman -S "$pacote" --noconfirm  ; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado.${SEM_COR}";
+    fi
+done;
 ;;
 3)
-sudo pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader; 
+for pacote in ${DRIVERS_GRAFIC_INSTAL_NVIDIA[@]}; do
+    if ! pacman -Q | grep -q "$pacote"; then 
+     echo -e "${VERDE}[INFO] - Instalando o $pacote...${SEM_COR}"; 
+    sudo pacman -S "$pacote" --noconfirm; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado.${SEM_COR}";
+    fi
+done;
 ;;
 esac;
 
 } 
 criarchavegpg(){
-gpg --full-generate-key;
+ echo -e "${VERDE}[INFO] - Criando chave GPG do Usuário...${SEM_COR}";
+sudo gpg --full-generate-key;
 }
 installnavegador(){
+pacote='microsoft-edge-dev-bin';
+pacote2='microsoft-edge-stable-bin';
+pacote3='google-chrome';
+pacote4='firefox';
     echo "- - - - - -| Escolha o seu Navegador |- - - - - - - -" 
     echo "1 - microsoft-edge-dev-bin";
     echo "2 - microsoft-edge-stable-bin";
     echo "1 - google-chrome";
     echo "1 - firefox";
     echo "q - para sair";
- read -r opcao;
+ read -rp "opção: " opcao;
 case $opcao in
- 
 1)
-yay -S microsoft-edge-dev-bin;
+
+
+ if ! yay -Q | grep -q "$pacote"; then  
+ echo -e "${VERDE}[INFO] - Instalando o $pacote...${SEM_COR}"; 
+    yay -S "$pacote" --noconfirm; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado. ${SEM_COR}";
+    fi
 ;;
 2)
-yay -S microsoft-edge-stable-bin;
+if ! yay -Q | grep -q "$pacote2"; then  
+    echo -e "${VERDE}[INFO] - Instalando o $pacote2...${SEM_COR}"; 
+    yay -S "$pacote2" --noconfirm; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote2 já está instalado.${SEM_COR}";
+    fi
 ;;
 3)
-yay -S google-chrome;
+if ! yay -Q | grep -q "$pacote3"; then
+    echo -e "${VERDE}[INFO] - Instalando o $pacote3...${SEM_COR}"; 
+    yay -S "$pacote3" --noconfirm; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote3 já está instalado.${SEM_COR}";
+    fi
 ;;
 4)
-yay -S firefox;
+if ! yay -Q | grep -q "$pacote4"; then  
+    echo -e "${VERDE}[INFO] - Instalando o $pacote4...${SEM_COR}"; 
+    yay -S "$pacote4" --noconfirm; 
+    else 
+    echo -e "${VERDE}[INFO] - O pacote $pacote4 já está instalado.${SEM_COR}";
+    fi
 ;;
 esac
 
 }
 
 zsheplugins(){
-    cd "$DIR" || exit;
-    #bash-syntax
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/plugins/zsh-autosuggestions;
-    echo "source ~plugin (zsh-autosuggestions)" >> ~/.zshrc;
-    #bash autosggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting;
-    #oh my zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)";
-    sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)";
+  echo -e "${VERDE}[INFO] - Instalando o OH MY ZSH e os plugins...${SEM_COR}"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+    if [ -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
+        echo "The directory already exists."
+    else
+        git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/plugins/zsh-autosuggestions
+    fi
+
+    if [ -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+        echo "The directory already exists."
+    else
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
+    fi
 }
 
 progesential () {
 
 for pacote in ${YAY_APP_INSTALL[@]}; do
-    if ! yay -Q | grep -q "$pacote"; then  
-    yay -S "$pacote"; 
+    if ! yay -Q | i aqui com o texto de grep -q "$pacote"; then  
+    echo -e "${VERDE}[INFO] - Instalando Programas essenciais para o seu sistema no yay...${SEM_COR}"; 
+    yay -S "$pacote" --noconfirm; 
     else 
-    echo "[INFO] - O pacote $pacote já está instalado";
+    echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado.${SEM_COR}";
     fi
 done;
 }
 instlarapps (){
+    echo -e "${VERDE}[INFO] - Instalando Progrmas essenciais para o seu sistema no pacman...${SEM_COR}"; 
     for programa in ${PACMAN_APP_INSTALL[@]}; do
         if ! pacman -Q | grep -q "$programa"; then  
-            sudo pacman -S "$programa"; 
+            sudo pacman -S "$programa" --noconfirm; 
         else 
-             echo "[INFO] - O pacote $pacote já está instalado";
+             echo -e "${VERDE}[INFO] - O pacote $programa já está instalado.${SEM_COR}";
         fi;
     done;
 }
 
 grubtheme() {
-cd "$DIR" || exit;
-git clone --depth 1 https://gitlab.com/VandalByte/dedsec-grub-theme.git && cd dedsec-grub-theme || exit;
+echo -e "${VERDE}[INFO] - Instalando theme dedsec para o grub...${SEM_COR}"; 
+cd "$DIR";
+if [ -f "$DIR/dedsec-grub-theme" ]; then
+    echo -e "${VERDE}[INFO] - O arquivo já existe."
+else
+git clone --depth 1 https://gitlab.com/VandalByte/dedsec-grub-theme.git && cd dedsec-grub-theme;
 sudo python3 dedsec-theme.py --install;
-rm -rf dedsec-grub-theme;
+fi
+
 }
 
 wallpaperengine(){
-sudo pacman -S extra-cmake-modules plasma-framework gst-libav base-devel mpv python-websockets qt5-declarative qt5-websockets qt5-webchannel vulkan-headers cmake;
-cd "$DIR" || exit;
+        echo -e "${VERDE}[INFO] - Instalando KDE Wallpaper Engine ...${SEM_COR}"; 
+        for programa2 in ${pacotes_KDE_WALLPAPER_INSTALL[@]}; do
+        if ! pacman -Q | grep -q "$programa2"; then  
+            sudo pacman -S "$programa2"; 
+        else 
+             echo -e "${VERDE}[INFO] - O pacote $programa2 já está instalado.${SEM_COR}";
+        fi;
+    done;
+
+cd "$DIR";
 # Download source
-git clone https://github.com/catsout/wallpaper-engine-kde-plugin.git
-cd wallpaper-engine-kde-plugin || exit
+if [ -f "caminho/do/arquivo" ]; then
+    echo -e "${VERDE} [INFO] - O arquivo já existe.${SEM_COR}"
+else
+ git clone https://github.com/catsout/wallpaper-engine-kde-plugin.git
+ cd wallpaper-engine-kde-plugin;
 
 # Download submodule (glslang)
-git submodule update --init
-
-# Configure
+ git submodule update --init;
+ # Configure
 # 'USE_PLASMAPKG=ON': using plasmapkg2 tool to install plugin
-mkdir build && cd build || exit
+mkdir build && cd build;
 cmake .. -DUSE_PLASMAPKG=ON
-
 # Build
 make -j7;
 
@@ -251,5 +426,10 @@ make -j7;
 make install_pkg;
 # install lib
 sudo make install;
+fi
+}
 
+ativaservicos(){
+    echo -e "${VERDE}[INFO] - ativando alguns serviçoes essenciais e reiniciando o sistema.${SEM_COR}"
+    sudo systemctl enable NetworkManager sddm bluetooth.service;
 }

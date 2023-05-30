@@ -1,12 +1,15 @@
-#! /usr/bin/bash
+#! /usr/bin/env bash
 # shellcheck source=/dev/null
 source "RAGFunções.sh";
 
+
 Menu() {
+clear;
+cabecalho;
 opcaow="";
 
 while [[ "$opcaow" != "q"  ]]
-do
+    do
     echo "Selecione uma opção:";
     echo " 1  - intalar yay!";
     echo " 2  - instalar paru!";
@@ -20,54 +23,28 @@ do
     echo " 10 - Programas Essenciais ";
     echo " 11 - Instalar thema dedsec ";
     echo " 12 - Instalar Wallpaper Engine ";
-    echo "  q - Sair  ";
+    echo " 13 - Ativar serviços essenciais ";
+    echo " q - Sair";
 
-        read -r opcao;
+        read -rp "Opção: " opcao;
 
-    case $opcao in
-    1)
-    InstalarYAY; 
-    ;;
-    2)
-    InstalarParu;
-    ;;
-    3)
-    ADDrepoChaotic;
-    ;;
-    4)
-    Intalarxanmod;
-    ;;
-    5)
-    instlarapps;
-    ;;
-    6)
-    driversGraficos;
-    ;;
-    7)
-    criarchavegpg;
-    ;;
-    8)
-    installnavegador;
-    ;;
-    9)
-    zsheplugins;
-    ;;
-    10)
-    progesential;
-    ;;
-    11)
-    grubtheme;
-    ;;
-    12)
-    wallpaperengine;
-    ;;
-    q) 
-    exit;
-    rm -rf "$DIR";
-    ;;    
-    *)rm -rf ~/"$DIR"
-        echo "Opção inválida";
-        ;;
-    esac
-done
+        case $opcao in
+    1)InstalarYAY ;;
+    2)InstalarParu ;;
+    3)ADDrepoChaotic ;;
+    4)Intalarxanmod ;;
+    5)instlarapps ;;
+    6)driversGraficos ;;
+    7)criarchavegpg ;;
+    8)installnavegador ;;
+    9)zsheplugins ;;
+    10)progesential ;;
+    11)grubtheme ;;
+    12)wallpaperengine ;;
+    13)ativaservicos ;;
+    q) exit ;;
+    *) echo "Opção inválida" ;;
+ esac
+done;
 }
+
