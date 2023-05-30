@@ -28,7 +28,7 @@ Dependendo da opção selecionada, o script executará a função correspondente
 
 Após a conclusão da tarefa, o menu será exibido novamente, permitindo que você selecione outra opção ou saia do script.
 
-Opções do Menu:
+# Opções do Menu:
 O menu do script RAGAPPINSTALL oferece as seguintes opções:
 
 Instalar YAY: Esta opção instala o gerenciador de pacotes YAY, que é usado para instalar aplicativos não disponíveis nos repositórios oficiais.
@@ -59,7 +59,7 @@ Ativar Serviços Essenciais: Esta opção ativa serviços essenciais para o func
 
 q. Sair: Esta opção encerra o script e sai do menu.
 
-Considerações Finais:
+#Considerações Finais:
 O script RAGAPPINSTALL é uma ferramenta útil para automatizar a instalação de pacotes e configurações em sistemas Linux. Ele simplifica o processo de instalação e configuração, permitindo que os usuários personalizem e ajustem seus sistemas de forma conveniente. Lembre-se de executar o script com privilégios de administrador para que as alterações sejam feitas corretamente no sistema.
 
 
