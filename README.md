@@ -1,6 +1,6 @@
 # RAGAPPINSTALL
 # Introdução:
-O script RAGAPPINSTALL é um conjunto de funções e um menu interativo para facilitar a instalação de diferentes pacotes e configurações em um ambiente Linux. Ele automatiza o processo de instalação de aplicativos, drivers gráficos, repositórios, temas, entre outras tarefas comuns em sistemas Linux.
+O script RAGAPPINSTALL é um conjunto de funções e um menu interativo para facilitar a instalação de diferentes pacotes e configurações em um ambiente Arch Linux. Ele automatiza o processo de instalação de aplicativos, drivers gráficos, repositórios, temas, entre outras tarefas comuns em sistemas Linux.
 
 # Funcionalidade:
 O script RAGAPPINSTALL fornece um menu interativo onde o usuário pode selecionar as opções desejadas. Cada opção corresponde a uma função específica que realiza uma tarefa específica, como instalar um aplicativo, configurar drivers gráficos, criar chaves GPG, entre outros. O script simplifica a instalação de software e configurações adicionais em sistemas Linux, tornando o processo mais rápido e conveniente.
