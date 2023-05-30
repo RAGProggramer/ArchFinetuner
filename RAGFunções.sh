@@ -1,8 +1,13 @@
 #! /usr/bin/env bash
 
+
 #-----------------------------------------| Váriaveis|-------------------------------------------------#
 DIR="$HOME/.RAGlog";
 export DIR;
+
+# Set error code variable
+ERROR_CODE=0
+
 
 YAY_APP_INSTALL=(
     visual-studio-code-bin
@@ -120,36 +125,30 @@ SEM_COR='\e[0m';
 
 #------------------------------------------| Testes/Atualização |------------------------------------------------#
 
-verifiDepScript(){
-    if ! ping -c 1 8.8.8.8 -q &> /dev/null; then
-    echo -e "${VERMELHO}[ERROR] - Seu computador não tem conexão com a internet.${SEM_COR}";
+ verifiDepScript() {
+  if ! ping -c 1 8.8.8.8 -q &>/dev/null; then
+    echo -e "${VERMELHO}[ERROR] - Seu computador não tem conexão com a internet.${SEM_COR}"
+    exit 1
+  else
+    echo -e "${VERDE}[INFO] - Conexão com a internet funcionando normalmente.${SEM_COR}"
+  fi
 
-    exit 1;
+  echo -e "${VERDE}[INFO] - Atualizando pacotes Pacman...${SEM_COR}"
+  sudo pacman -Syu --noconfirm || { echo -e "${VERMELHO}[ERROR] - Falha ao atualizar os pacotes Pacman.${SEM_COR}"; exit 1; }
+
+  echo -e "${VERDE}[INFO] - Atualizando pacotes YAY...${SEM_COR}"
+  yay -Syu --noconfirm || { echo -e "${VERMELHO}[ERROR] - Falha ao atualizar os pacotes YAY.${SEM_COR}"; exit 1; }
+
+  for programa in "${PAC[@]}"; do
+    if ! pacman -Q | grep -q "$programa"; then
+      echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}"
+      sudo pacman -S "$programa" --noconfirm || { echo -e "${VERMELHO}[ERROR] - Falha ao instalar o pacote $programa.${SEM_COR}"; ERROR_CODE=1; }
     else
-    echo -e "${VERDE}[INFO] - Conexão com a internet funcionando normalmente.${SEM_COR}"; 
+      echo -e "${VERDE}[INFO] - O pacote $programa já está instalado.${SEM_COR}"
     fi
-
-    echo -e "${VERDE}[INFO] - Atualizando pacotes Pacman...${SEM_COR}";
-    sudo pacman -Syu --noconfirm;
-    
-    echo "                                          ";
-
-    echo -e "${VERDE}[INFO] - Atualizando pacotes YAY...${SEM_COR}";
-    yay -Syu --noconfirm;
-    
-
-
-
-    for programa in ${PAC[@]}; do
-
-        if ! pacman -Q | grep -q "$programa"; then  
-        echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}";
-            sudo pacman -S "$programa" --noconfirm; 
-        else 
-             echo -e "${VERDE}[INFO] - O pacote $programa já está instalado.${SEM_COR}";
-        fi;
-    done;
+  done
 }
+
 #-------------------------------------------| Funções |-----------------------------------------------#
 cabecalho ( ) {
 echo "                                                                                                                       ";
@@ -364,7 +363,7 @@ zsheplugins(){
 progesential () {
 
 for pacote in ${YAY_APP_INSTALL[@]}; do
-    if ! yay -Q | i aqui com o texto de grep -q "$pacote"; then  
+    if ! yay -Q | grep -q "$pacote"; then  
     echo -e "${VERDE}[INFO] - Instalando Programas essenciais para o seu sistema no yay...${SEM_COR}"; 
     yay -S "$pacote" --noconfirm; 
     else 
