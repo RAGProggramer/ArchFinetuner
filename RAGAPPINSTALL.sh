@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 # shellcheck source=/dev/null
 # Importação de arquivos de funções e menu#
-source RAGFunções.sh
-source RAGMenu.sh
+source RAGFunções.sh;
+source RAGMenu.sh;
 ################################################################################
 # Nome do Scipt: RAG INSTALL APP
 # Autor: Gabriel Aguiar Rocha
@@ -16,14 +16,12 @@ source RAGMenu.sh
 
 
 main() {
-    clear
-    echo "                                          "
-    cabecalho
-    echo "                                          "
-    verifiDepScript
-    echo "                                          "
-    verifDirExit
-    echo "                                          "
-    Menu
+    clear;
+    echo "                                          ";
+    verifiDepScript;
+    echo "                                          ";
+    verifDirExit;
+    echo "                                          ";
+    Menu;
 }
 main;

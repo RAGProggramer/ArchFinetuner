@@ -1,64 +1,34 @@
-# RAGAPPINSTALL
-# Introdução:
-O script RAGAPPINSTALL é um conjunto de funções e um menu interativo para facilitar a instalação de diferentes pacotes e configurações em um ambiente Arch Linux. Ele automatiza o processo de instalação de aplicativos, drivers gráficos, repositórios, temas, entre outras tarefas comuns em sistemas Linux.
+Script de Pós-Instalação do Arch Linux - RAGdev
+Logo RAGdev
 
-# Funcionalidade:
-O script RAGAPPINSTALL fornece um menu interativo onde o usuário pode selecionar as opções desejadas. Cada opção corresponde a uma função específica que realiza uma tarefa específica, como instalar um aplicativo, configurar drivers gráficos, criar chaves GPG, entre outros. O script simplifica a instalação de software e configurações adicionais em sistemas Linux, tornando o processo mais rápido e conveniente.
+Descrição
+O Script de Pós-Instalação do Arch Linux - RAGdev é uma ferramenta automatizada desenvolvida para facilitar o processo de configuração e instalação de pacotes após a instalação do sistema operacional Arch Linux. Com esse script, você pode rapidamente configurar seu ambiente de desenvolvimento ou uso pessoal, economizando tempo e esforço.
 
-# Uso:
-Para executar o script RAGAPPINSTALL, siga as etapas abaixo:
-
-Abra um terminal no ambiente Linux.
-
-Navegue até o diretório onde o script RAGAPPINSTALL está localizado.
-
-Execute o seguinte comando:
-
-Copy code
-./RAGAPPINSTALL.sh
-O menu interativo será exibido com várias opções numeradas.
-
-Selecione a opção desejada digitando o número correspondente e pressione Enter.
-
-Dependendo da opção selecionada, o script executará a função correspondente e realizará a tarefa relacionada, como instalar um aplicativo específico, configurar drivers gráficos, etc.
-
-Após a conclusão da tarefa, o menu será exibido novamente, permitindo que você selecione outra opção ou saia do script.
-
-# Opções do Menu:
-O menu do script RAGAPPINSTALL oferece as seguintes opções:
-
-Instalar YAY: Esta opção instala o gerenciador de pacotes YAY, que é usado para instalar aplicativos não disponíveis nos repositórios oficiais.
-
-Instalar Paru: Esta opção instala o gerenciador de pacotes Paru, uma alternativa ao YAY.
-
-Adicionar Repositório Chaotic e Multilib: Esta opção adiciona o repositório Chaotic-AUR e ativa o suporte a multilib.
-
-Instalar Kernel Xanmod: Esta opção instala o kernel Xanmod, uma versão personalizada do kernel Linux com recursos adicionais.
-
-Instalar KDE Plasma e todas as suas dependências: Esta opção instala o ambiente de desktop KDE Plasma e todas as dependências necessárias.
-
-Instalar Drivers Gráficos: Esta opção instala os drivers gráficos necessários para placas de vídeo específicas.
-
-Criar Chave GPG: Esta opção cria uma chave GPG para uso em assinatura digital e criptografia.
-
-Instalar Navegador: Esta opção instala um navegador da web.
-
-Oh My Zsh e Plugins: Esta opção instala o framework Oh My Zsh e alguns plugins úteis para personalizar o shell.
-
-Programas Essenciais: Esta opção instala programas essenciais para uso geral.
-
-Instalar Tema Dedsec: Esta opção instala o tema Dedsec para personalizar a aparência do sistema.
-
-Instalar Wallpaper Engine: Esta opção instala o Wallpaper Engine, um programa para exibir papéis de parede animados.
-
-Ativar Serviços Essenciais: Esta opção ativa serviços essenciais para o funcionamento adequado do sistema.
-
-q. Sair: Esta opção encerra o script e sai do menu.
-
-# Considerações Finais:
-O script RAGAPPINSTALL é uma ferramenta útil para automatizar a instalação de pacotes e configurações em sistemas Linux. Ele simplifica o processo de instalação e configuração, permitindo que os usuários personalizem e ajustem seus sistemas de forma conveniente. Lembre-se de executar o script com privilégios de administrador para que as alterações sejam feitas corretamente no sistema.
-
-
-
-
-
+Características
+Atualiza e instala pacotes Pacman e AUR.
+Instala o gerenciador de pacotes Paru.
+Instala o gerenciador de pacotes YAY.
+Adiciona o repositório Chaotic-aur e configura o pacman.conf.
+Cria um diretório de log/downloads (configurável).
+Instala drivers gráficos para placas AMD, Intel e NVIDIA.
+Cria uma chave GPG para o usuário.
+Instala o ZSH e os plugins ZSH-Autosuggestions e ZSH-Syntax-Highlighting.
+Instala e configura o tema Dedsec para o GRUB.
+Ativa alguns serviços essenciais (NetworkManager, SDDM, Bluetooth).
+Instala navegadores populares (Microsoft Edge, Google Chrome, Mozilla Firefox).
+Permite escolher uma interface de desktop (KDE, GNOME, XFCE, Cinnamon).
+Instala kernels adicionais para o sistema.
+Requisitos
+Sistema operacional: Arch Linux
+Acesso à internet (para atualizar e instalar pacotes)
+Permissões de superusuário (para executar comandos com sudo)
+Como Usar
+Faça o download do script .
+Abra o terminal e navegue até o diretório onde o script foi baixado.
+Dê permissão de execução ao script: chmod +x ragdev.sh.
+Execute o script com permissões de superusuário: sudo ./ragdev.sh.
+O menu de opções será exibido. Escolha as configurações desejadas e siga as instruções.
+Documentação Adicional
+O script possui comentários explicativos em cada função para ajudar a entender o que está sendo feito em cada etapa.
+Os pacotes a serem instalados podem ser personalizados editando as variáveis PAC e DRIVERS_GRAFIC_INSTAL no início do script.
+É recomendado executar o script após a instalação limpa do Arch Linux.

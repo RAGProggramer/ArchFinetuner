@@ -1,53 +1,74 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null
-source "RAGFunções.sh"
 
-AZUL="\033[34m"
-SEM_COR="\033[0m"
+# shellcheck source=/dev/null
+source "RAGFunções.sh";
+source "RAGkernels.sh";
+source "RAGYAYPKG.sh";
+source "RAGinterfaceINS.sh";
 
 Menu() {
+  while true; do
     clear
     cabecalho
-    opcaow=""
+    echo "1) Instalar Paru"
+    echo "2) Instalar YAY"
+    echo "3) Adicionar Repositório Chaotic AUR"
+    echo "4) Instalar Drivers Gráficos"
+    echo "5) Criar Chave GPG"
+    echo "6) Instalar ZSH e Plugins"
+    echo "7) Instalar Grub Theme Dedsec"
+    echo "8) Ativar Serviços"
+    echo "9) Instalar Navegador"
+    echo "10) Escolher Interface"
+    echo "11) Instalar Kernels"
+    echo "q) Sair"
 
-    while [[ "$opcaow" != "q" ]]
-    do
-        echo -e "Selecione uma opção:"
-        echo -e "${AZUL} 1  - Instalar yay!${SEM_COR}"
-        echo -e "${AZUL} 2  - Instalar paru!${SEM_COR}"
-        echo -e "${AZUL} 3  - Adicionar Repositório chaotic e multilib!${SEM_COR}"
-        echo -e "${AZUL} 4  - Instalar kernel xanmod${SEM_COR}"
-        echo -e "${AZUL} 5  - Instalar KDE Plasma e todas as suas dependências${SEM_COR}"
-        echo -e "${AZUL} 6  - Instalar drivers gráficos${SEM_COR}"
-        echo -e "${AZUL} 7  - Criar chave GPG${SEM_COR}"
-        echo -e "${AZUL} 8  - Instalar Navegador${SEM_COR}"
-        echo -e "${AZUL} 9  - Oh My Zsh e Plugins${SEM_COR}"
-        echo -e "${AZUL} 10 - Programas Essenciais${SEM_COR}"
-        echo -e "${AZUL} 11 - Instalar tema dedsec${SEM_COR}"
-        echo -e "${AZUL} 12 - Instalar Wallpaper Engine${SEM_COR}"
-        echo -e "${AZUL} 13 - Ativar serviços essenciais${SEM_COR}"
-        echo -e "${VERMELHO} q - Sair${SEM_COR}"
+    read -rp "Escolha uma opção: " opcao
 
-        read -rp "Opção: " opcao
+    case $opcao in
+      1)
+        instalar_paru
+        ;;
+      2)
+        instalar_yay
+        ;;
+      3)
+        ADDrepoChaotic
+        ;;
+      4)
+        driversGraficos
+        ;;
+      5)
+        criarchavegpg
+        ;;
+      6)
+        zsheplugins
+        ;;
+      7)
+        grubtheme
+        ;;
+      8)
+        ativaservicos
+        ;;
+      9)
+        installnavegador
+        ;;
+      10)
+        escolher_interface
+        ;;
+      11)
+        IntallKernels
+        ;;
+      q)
+        echo "Saindo..."
+        exit 0
+        ;;
+      *)
+        echo "Opção inválida. Tente novamente."
+        sleep 1
+        ;;
+    esac
 
-        case $opcao in
-            1) InstalarYAY ;;
-            2) InstalarParu ;;
-            3) ADDrepoChaotic ;;
-            4) Intalarxanmod ;;
-            5) instlarapps ;;
-            6) driversGraficos ;;
-            7) criarchavegpg ;;
-            8) installnavegador ;;
-            9) zsheplugins ;;
-            10) progesential ;;
-            11) grubtheme ;;
-            12) wallpaperengine ;;
-            13) ativaservicos ;;
-            q) exit ;;
-            *) echo -e "${VERMELHO}Opção inválida${SEM_COR}" ;;
-        esac
-    done
+    read -rp "Pressione ENTER para voltar ao menu."
+  done
 }
-
-Menu
