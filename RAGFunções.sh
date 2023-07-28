@@ -225,44 +225,43 @@ EOF
     gpg --list-keys --keyid-format LONG "$USER"
 }
 
-# Chamar a função para iniciar o processo de instalação
-
+# Chamar a função para iniciar o processo de instalação do zsh
 zsheplugins(){
-  if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo -e "${VERDE}[INFO] - Instalando o OH MY ZSH...${SEM_COR}"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended"
-  else
-    echo -e "${VERDE}[INFO] - OH MY ZSH já está instalado.${SEM_COR}"
-  fi
+    sudo pacman -S zsh --noconfirn 
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        echo -e "${VERDE}[INFO] - Instalando o OH MY ZSH...${SEM_COR}"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended"
+    else
+        echo -e "${VERDE}[INFO] - OH MY ZSH já está instalado.${SEM_COR}"
+    fi
 
-  # Verifica e instala o plugin zsh-autosuggestions
-  if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
-    echo -e "${VERDE}[INFO] - Instalando o plugin zsh-autosuggestions...${SEM_COR}"
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
-  else
-    echo -e "${VERDE}[INFO] - O plugin zsh-autosuggestions já está instalado.${SEM_COR}"
-  fi
+    # Verifica e instala o plugin zsh-autosuggestions
+    if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
+        echo -e "${VERDE}[INFO] - Instalando o plugin zsh-autosuggestions...${SEM_COR}"
+        git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/plugins/zsh-autosuggestions
+    else
+        echo -e "${VERDE}[INFO] - O plugin zsh-autosuggestions já está instalado.${SEM_COR}"
+    fi
 
-  # Verifica e instala o plugin zsh-syntax-highlighting
-  if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
-    echo -e "${VERDE}[INFO] - Instalando o plugin zsh-syntax-highlighting...${SEM_COR}"
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
-  else
-    echo -e "${VERDE}[INFO] - O plugin zsh-syntax-highlighting já está instalado.${SEM_COR}"
-  fi
+    # Verifica e instala o plugin zsh-syntax-highlighting
+    if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+        echo -e "${VERDE}[INFO] - Instalando o plugin zsh-syntax-highlighting...${SEM_COR}"
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
+    else
+        echo -e "${VERDE}[INFO] - O plugin zsh-syntax-highlighting já está instalado.${SEM_COR}"
+    fi
 }
 
 
 grubtheme() {
-echo -e "${VERDE}[INFO] - Instalando theme dedsec para o grub...${SEM_COR}"; 
-cd "$DIR";
-if [ -f "$DIR/dedsec-grub-theme" ]; then
-    echo -e "${VERDE}[INFO] - O arquivo já existe."
-else
-git clone --depth 1 https://gitlab.com/VandalByte/dedsec-grub-theme.git && cd dedsec-grub-theme;
-sudo python3 dedsec-theme.py --install;
-fi
-
+    echo -e "${VERDE}[INFO] - Instalando theme dedsec para o grub...${SEM_COR}"; 
+    cd "$DIR";
+    if [ -f "$DIR/dedsec-grub-theme" ]; then
+        echo -e "${VERDE}[INFO] - O arquivo já existe."
+    else
+    git clone --depth 1 https://gitlab.com/VandalByte/dedsec-grub-theme.git && cd dedsec-grub-theme;
+    sudo python3 dedsec-theme.py --install;
+    fi
 }
 
 ativaservicos(){
@@ -270,8 +269,7 @@ ativaservicos(){
     sudo systemctl enable NetworkManager sddm bluetooth.service;
 }
 
-
-installnavegador() {
+instalarNavegador() {
     echo "---------------------------------------------"
     echo "|        Escolha o seu Navegador           |"
     echo "---------------------------------------------"
@@ -288,8 +286,8 @@ installnavegador() {
 
     case $opcao in
         [1-4])
-            nome_navegador="${!NAVEGADORES[@]}"
-            navegador_selecionado=${nome_navegador[opcao-1]}
+            nomes_navegadores=("${!NAVEGADORES[@]}")
+            navegador_selecionado=${nomes_navegadores[opcao-1]}
             pacote=${NAVEGADORES[$navegador_selecionado]}
 
             if ! yay -Q | grep -q "$pacote"; then

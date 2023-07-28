@@ -4,7 +4,7 @@
 source "RAGFunções.sh";
 source "RAGkernels.sh";
 source "RAGYAYPKG.sh";
-source "RAGinterfaceINS.sh";
+source "RAGInterfaceINS.sh";
 
 Menu() {
   while true; do
@@ -51,7 +51,7 @@ Menu() {
         ativaservicos
         ;;
       9)
-        installnavegador
+       instalarNavegador
         ;;
       10)
         escolher_interface
