@@ -59,6 +59,9 @@ Menu() {
       11)
         IntallKernels
         ;;
+        12)
+        install_or_skip_package
+        ;;
       q)
         echo "Saindo..."
         exit 0

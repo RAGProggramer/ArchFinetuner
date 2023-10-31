@@ -49,7 +49,7 @@ IntallKernels() {
         [1-9]|[1-9][0-9])
             if [[ -n "${kernels[$escolha]}" ]]; then
                 instalar_kernel "$escolha"
-            else
+            else    
                 echo "Opção inválida."
             fi
             ;;

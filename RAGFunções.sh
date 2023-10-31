@@ -4,7 +4,6 @@
 #-----------------------------------------| Váriaveis|-------------------------------------------------#
 export DIR="$HOME/.cache/RAGlog";
 
-
 # Set error code variable
 export ERROR_CODE=2
 
@@ -155,7 +154,6 @@ ADDrepoChaotic () {
 }
 #essa função verifica se o diretorio log/downloads do nosso script funciona ou existe
 verifDirExit () {
-    DIR="seu_diretorio_aqui"
 
     # Verifica se o diretório já existe
     if [[ -d "$DIR" ]]; then
@@ -186,9 +184,7 @@ driversGraficos() {
             instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["AMD"]}
             ;;
         2)
-            instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["INTEL"]}
-            ;;
-        3)
+            instalar_pacotes $ero do kernel que deseja instalar
             instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["NVIDIA"]}
             ;;
         q)
@@ -201,19 +197,33 @@ driversGraficos() {
 }
 
 criarchavegpg() {
-    echo -e "${VERDE}[INFO] - Criando chave GPG do Usuário...${SEM_COR}";
-    
-    # Pedir informações ao usuário
-    read -p "Tamanho da chave (em bits): " chave_tamanho
-    read -p "Comentário para a chave: " chave_comentario
-    read -p "Prazo de validade da chave (em dias, deixe em branco para não definir prazo): " chave_prazo
+    # Permitir que o usuário escolha o tipo de chave
+read -p "Tipo de chave (RSA ou DSA): " chave_tipo
 
-    # Gerar a chave GPG
+# Permitir que o usuário escolha o nível de criptografia
+read -p "Nível de criptografia (1024, 2048 ou 4096 bits): " chave_tamanho
+
+# Permitir que o usuário defina uma frase-passe para a chave
+read -p "Frase-passe para a chave: " chave_senha
+    echo -e "${VERDE}[INFO] - Criando chave GPG do Usuário...${SEM_COR}";
+
+    # Declarar variáveis
+    chave_tamanho=${1:-4096}
+    chave_comentario=${2:-"Chave GPG do Usuário"}
+    chave_prazo=${3:-""}
+
+    # Validar entradas do usuário
+    if [[ $chave_tamanho -lt 1024 ]]; then
+        echo -e "${VERDE}[ERRO] - O tamanho da chave deve ser maior ou igual a 1024 bits.${SEM_COR}"
+        return 1
+    fi
+
+    # Gerar port DIR="$HOME/.cache/RAGlog";a chave GPG
     gpg --batch --full-generate-key <<EOF
         Key-Type: RSA
         Key-Length: $chave_tamanho
         Subkey-Type: RSA
-        Subkey-Length: $chave_tamanho
+        Key-Length: $chave_tamanho
         Name-Real: $USER
         Comment: $chave_comentario
         $([ -n "$chave_prazo" ] && echo "Expire-Date: +$chave_prazo")
@@ -263,7 +273,7 @@ grubtheme() {
     sudo python3 dedsec-theme.py --install;
     fi
 }
-
+port DIR="$HOME/.cache/RAGlog";
 ativaservicos(){
     echo -e "${VERDE}[INFO] - ativando alguns serviçoes essenciais e reiniciando o sistema.${SEM_COR}"
     sudo systemctl enable NetworkManager sddm bluetooth.service;
