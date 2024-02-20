@@ -2,7 +2,7 @@
 # shellcheck source=/dev/null
 
 #-----------------------------------------| Váriaveis|-------------------------------------------------#
-export DIR="$HOME/.cache/RAGlog";
+export DIR="$HOME/.cache/RAGlog"
 
 # Set error code variable
 export ERROR_CODE=2
@@ -21,64 +21,73 @@ declare -A DRIVERS_GRAFIC_INSTAL=(
 )
 
 PAC=(
-    base-devel 
+    base-devel
     git
+    zsh
+    zsh-completions
 )
 
-VERMELHO='\e[1;91m';
-VERDE='\e[1;92m';
-SEM_COR='\e[0m';
+VERMELHO='\e[1;91m'
+VERDE='\e[1;92m'
+SEM_COR='\e[0m'
 GREEN='\033[0;32m'
 RESET='\033[0m'
 
 #------------------------------------------| Testes/Atualização |------------------------------------------------#
 
 atualizarEInstalarPacotes() {
-  local CODIGO_ERRO=2
-  local pacotes_com_falha=()
+    local CODIGO_ERRO=2
+    local pacotes_com_falha=()
 
-  if ! ping -c 1 8.8.8.8 -q &>/dev/null; then
-    echo -e "${VERMELHO}[ERRO] - Seu computador não tem conexão com a internet.${SEM_COR}"
-    return 1
-  else
-    echo -e "${VERDE}[INFO] - Conexão com a internet funcionando normalmente.${SEM_COR}"
-  fi
-
-  echo -e "${VERDE}[INFO] - Atualizando pacotes Pacman e YAY...${SEM_COR}"
-  sudo pacman -Syu --noconfirm || { echo -e "${VERMELHO}[ERRO] - Falha ao atualizar os pacotes Pacman.${SEM_COR}"; return 1; }
-  yay -Syu --noconfirm || { echo -e "${VERMELHO}[ERRO] - Falha ao atualizar os pacotes YAY.${SEM_COR}"; return 1; }
-
-  PAC=("pacote1" "pacote2" "pacote3")  # Adicione aqui a lista de pacotes que você deseja instalar
-
-  for programa in "${PAC[@]}"; do
-    if ! pacman -Qq "$programa" &>/dev/null; then
-      echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}"
-      sudo pacman -S "$programa" --noconfirm || { echo -e "${VERMELHO}[ERRO] - Falha ao instalar o pacote $programa.${SEM_COR}"; pacotes_com_falha+=("$programa"); }
+    if ! ping -c 1 8.8.8.8 -q &>/dev/null; then
+        echo -e "${VERMELHO}[ERRO] - Seu computador não tem conexão com a internet.${SEM_COR}"
+        return 1
     else
-      echo -e "${VERDE}[INFO] - O pacote $programa já está instalado.${SEM_COR}"
+        echo -e "${VERDE}[INFO] - Conexão com a internet funcionando normalmente.${SEM_COR}"
     fi
-  done
 
-  if [ ${#pacotes_com_falha[@]} -gt 0 ]; then
-    echo -e "${VERMELHO}[ERRO] - Falha ao instalar os seguintes pacotes: ${pacotes_com_falha[*]}.${SEM_COR}"
-    return 1
-  fi
+    echo -e "${VERDE}[INFO] - Atualizando pacotes Pacman e YAY...${SEM_COR}"
+    sudo pacman -Syu --noconfirm || {
+        echo -e "${VERMELHO}[ERRO] - Falha ao atualizar os pacotes Pacman.${SEM_COR}"
+        return 1
+    }
+    yay --noconfirm || {
+        echo -e "${VERMELHO}[ERRO] - Falha ao atualizar os pacotes YAY.${SEM_COR}"
+        return 1
+    }
 
-  echo -e "${VERDE}[INFO] - Todos os pacotes foram instalados ou já estão presentes.${SEM_COR}"
-  return 0
+    for programa in "${PAC[@]}"; do
+        if ! pacman -Qq "$programa" &>/dev/null; then
+            echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}"
+            sudo pacman -S "$programa" --noconfirm || {
+                echo -e "${VERMELHO}[ERRO] - Falha ao instalar o pacote $programa.${SEM_COR}"
+                pacotes_com_falha+=("$programa")
+            }
+        else
+            echo -e "${VERDE}[INFO] - O pacote $programa já está instalado.${SEM_COR}"
+        fi
+    done
+
+    if [ ${#pacotes_com_falha[@]} -gt 0 ]; then
+        echo -e "${VERMELHO}[ERRO] - Falha ao instalar os seguintes pacotes: ${pacotes_com_falha[*]}.${SEM_COR}"
+        return 1
+    fi
+
+    echo -e "${VERDE}[INFO] - Todos os pacotes foram instalados ou já estão presentes.${SEM_COR}"
+    return 0
 }
 
 
 #-------------------------------------------| Funções |-----------------------------------------------#
-cabecalho ( ) {
-echo "                                                                                                                       ";
-echo "    ██████╗  █████╗  ██████╗     ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗          █████╗ ██████╗ ██████╗     ";
-echo "    ██╔══██╗██╔══██╗██╔════╝     ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║         ██╔══██╗██╔══██╗██╔══██╗    ";
-echo "    ██████╔╝███████║██║  ███╗    ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║         ███████║██████╔╝██████╔╝    ";
-echo "    ██╔══██╗██╔══██║██║   ██║    ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║         ██╔══██║██╔═══╝ ██╔═══╝     ";
-echo "    ██║  ██║██║  ██║╚██████╔╝    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗    ██║  ██║██║     ██║         ";
-echo "    ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝     ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝╚═╝     ╚═╝         ";
-echo "                                                                                                                       ";
+cabecalho() {
+    echo "                                                                                                                       "
+    echo "    ██████╗  █████╗  ██████╗     ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗          █████╗ ██████╗ ██████╗     "
+    echo "    ██╔══██╗██╔══██╗██╔════╝     ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║         ██╔══██╗██╔══██╗██╔══██╗    "
+    echo "    ██████╔╝███████║██║  ███╗    ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║         ███████║██████╔╝██████╔╝    "
+    echo "    ██╔══██╗██╔══██║██║   ██║    ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║         ██╔══██║██╔═══╝ ██╔═══╝     "
+    echo "    ██║  ██║██║  ██║╚██████╔╝    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗    ██║  ██║██║     ██║         "
+    echo "    ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝     ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝╚═╝     ╚═╝         "
+    echo "                                                                                                                       "
 }
 
 # Função para mostrar o efeito de carregamento
@@ -103,7 +112,7 @@ instalar_paru() {
         echo -e "${VERDE}[INFO] - Instalando gerenciador de pacotes paru...${SEM_COR}"
         show_loading "Clonando repositório"
         git clone https://aur.archlinux.org/paru.git
-        cd paru;
+        cd paru
         show_loading "Compilando e instalando"
         makepkg -si
     fi
@@ -122,8 +131,6 @@ instalar_yay() {
         makepkg -si
     fi
 }
-
-
 
 modificarPacmanConf() {
     # Etapa 1: Adicionar a seção [chaotic-aur]
@@ -144,16 +151,16 @@ modificarPacmanConf() {
 }
 
 #essa função  adiciona o repitorio chaotic-aur
-ADDrepoChaotic () {
-    echo -e "${VERDE}[INFO] - Adicionando Repositorios e Mirros do Chaotic.${SEM_COR}";
+ADDrepoChaotic() {
+    echo -e "${VERDE}[INFO] - Adicionando Repositorios e Mirros do Chaotic.${SEM_COR}"
     sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
     sudo pacman-key --lsign-key 3056513887B78AEB
     sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-# Executar a função
+    # Executar a função
     modificarPacmanConf
 }
 #essa função verifica se o diretorio log/downloads do nosso script funciona ou existe
-verifDirExit () {
+verifDirExit() {
 
     # Verifica se o diretório já existe
     if [[ -d "$DIR" ]]; then
@@ -180,69 +187,74 @@ driversGraficos() {
     read -rp "Opção: " opcao
 
     case $opcao in
-        1)
-            instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["AMD"]}
-            ;;
-        2)
-            instalar_pacotes $ero do kernel que deseja instalar
-            instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["NVIDIA"]}
-            ;;
-        q)
-            echo "Saindo..."
-            ;;
-        *)
-            echo "Opção inválida. Tente novamente."
-            ;;
+    1)
+        instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["AMD"]}
+        ;;
+    2)
+        instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["INTEL"]}
+        ;;
+    3)
+        instalar_pacotes ${DRIVERS_GRAFIC_INSTAL["NVIDIA"]}
+        ;;
+    q)
+        echo "Saindo..."
+        ;;
+    *)
+        echo "Opção inválida. Tente novamente."
+        ;;
     esac
+    
 }
 
 criarchavegpg() {
-    # Permitir que o usuário escolha o tipo de chave
-read -p "Tipo de chave (RSA ou DSA): " chave_tipo
+    # Diretório para armazenar a chave GPG
+    DIR="$HOME/.cache/RAGlog"
 
-# Permitir que o usuário escolha o nível de criptografia
-read -p "Nível de criptografia (1024, 2048 ou 4096 bits): " chave_tamanho
-
-# Permitir que o usuário defina uma frase-passe para a chave
-read -p "Frase-passe para a chave: " chave_senha
-    echo -e "${VERDE}[INFO] - Criando chave GPG do Usuário...${SEM_COR}";
-
-    # Declarar variáveis
-    chave_tamanho=${1:-4096}
-    chave_comentario=${2:-"Chave GPG do Usuário"}
-    chave_prazo=${3:-""}
-
-    # Validar entradas do usuário
-    if [[ $chave_tamanho -lt 1024 ]]; then
-        echo -e "${VERDE}[ERRO] - O tamanho da chave deve ser maior ou igual a 1024 bits.${SEM_COR}"
-        return 1
+    # Verificar se as variáveis estão definidas corretamente
+    if [[ -z "$chave_tamanho" ]]; then
+        echo "Erro: Variável chave_tamanho não definida." >&2
+        exit 1
     fi
 
-    # Gerar port DIR="$HOME/.cache/RAGlog";a chave GPG
+    if [[ -z "$chave_comentario" ]]; then
+        echo "Erro: Variável chave_comentario não definida." >&2
+        exit 1
+    fi
+
+    # Gerar a chave GPG
+    echo "Gerando chave GPG..."
     gpg --batch --full-generate-key <<EOF
-        Key-Type: RSA
-        Key-Length: $chave_tamanho
-        Subkey-Type: RSA
-        Key-Length: $chave_tamanho
-        Name-Real: $USER
-        Comment: $chave_comentario
-        $([ -n "$chave_prazo" ] && echo "Expire-Date: +$chave_prazo")
-        %commit
+    Key-Type: RSA
+    Key-Length: $chave_tamanho
+    Subkey-Type: RSA
+    Key-Length: $chave_tamanho
+    Name-Real: $USER
+    Comment: $chave_comentario
+    $([ -n "$chave_prazo" ] && echo "Expire-Date: +$chave_prazo")
+    %commit
 EOF
 
+    # Verificar se a geração da chave foi bem-sucedida
+    if [[ $? -ne 0 ]]; then
+        echo "Erro: Falha ao gerar a chave GPG." >&2
+        exit 1
+    fi
+
     # Exibir mensagem com o ID da chave gerada
-    echo -e "\n${VERDE}[INFO] - Chave GPG criada com o ID abaixo:${SEM_COR}"
+    echo -e "\n[INFO] - Chave GPG criada com o ID abaixo:"
     gpg --list-keys --keyid-format LONG "$USER"
+
 }
 
 # Chamar a função para iniciar o processo de instalação do zsh
-zsheplugins(){
-    sudo pacman -S zsh --noconfirn 
+zsheplugins() {
+    sudo pacman -S zsh --noconfirn
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         echo -e "${VERDE}[INFO] - Instalando o OH MY ZSH...${SEM_COR}"
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended"
     else
-        echo -e "${VERDE}[INFO] - OH MY ZSH já está instalado.${SEM_COR}"
+        echo -e "${VERDE}[INFO] - OH MY ZSH já está  zsh
+    zsh-completions instalado.${SEM_COR}"
     fi
 
     # Verifica e instala o plugin zsh-autosuggestions
@@ -262,21 +274,20 @@ zsheplugins(){
     fi
 }
 
-
 grubtheme() {
-    echo -e "${VERDE}[INFO] - Instalando theme dedsec para o grub...${SEM_COR}"; 
-    cd "$DIR";
+    echo -e "${VERDE}[INFO] - Instalando theme dedsec para o grub...${SEM_COR}"
+    cd "$DIR"
     if [ -f "$DIR/dedsec-grub-theme" ]; then
         echo -e "${VERDE}[INFO] - O arquivo já existe."
     else
-    git clone --depth 1 https://gitlab.com/VandalByte/dedsec-grub-theme.git && cd dedsec-grub-theme;
-    sudo python3 dedsec-theme.py --install;
+        git clone --depth 1 https://gitlab.com/VandalByte/dedsec-grub-theme.git && cd dedsec-grub-theme
+        sudo python3 dedsec-theme.py --install
     fi
 }
-port DIR="$HOME/.cache/RAGlog";
-ativaservicos(){
+port DIR="$HOME/.cache/RAGlog"
+ativaservicos() {
     echo -e "${VERDE}[INFO] - ativando alguns serviçoes essenciais e reiniciando o sistema.${SEM_COR}"
-    sudo systemctl enable NetworkManager sddm bluetooth.service;
+    sudo systemctl enable NetworkManager sddm bluetooth.service
 }
 
 instalarNavegador() {
@@ -291,28 +302,28 @@ instalarNavegador() {
     done
 
     echo "q - Sair"
-    
+
     read -rp "Opção: " opcao
 
     case $opcao in
-        [1-4])
-            nomes_navegadores=("${!NAVEGADORES[@]}")
-            navegador_selecionado=${nomes_navegadores[opcao-1]}
-            pacote=${NAVEGADORES[$navegador_selecionado]}
+    [1-4])
+        nomes_navegadores=("${!NAVEGADORES[@]}")
+        navegador_selecionado=${nomes_navegadores[opcao - 1]}
+        pacote=${NAVEGADORES[$navegador_selecionado]}
 
-            if ! yay -Q | grep -q "$pacote"; then
-                echo "[INFO] - Instalando o $navegador_selecionado..."
-                yay -S "$pacote" --noconfirm
-                echo "[INFO] - $navegador_selecionado instalado com sucesso!"
-            else
-                echo "[INFO] - O pacote $navegador_selecionado já está instalado."
-            fi
-            ;;
-        "q")
-            echo "Saindo do menu."
-            ;;
-        *)
-            echo "Opção inválida. Saindo do menu."
-            ;;
+        if ! yay -Q | grep -q "$pacote"; then
+            echo "[INFO] - Instalando o $navegador_selecionado..."
+            yay -S "$pacote" --noconfirm
+            echo "[INFO] - $navegador_selecionado instalado com sucesso!"
+        else
+            echo "[INFO] - O pacote $navegador_selecionado já está instalado."
+        fi
+        ;;
+    "q")
+        echo "Saindo do menu."
+        ;;
+    *)
+        echo "Opção inválida. Saindo do menu."
+        ;;
     esac
 }

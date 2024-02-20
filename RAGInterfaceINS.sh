@@ -1,67 +1,68 @@
 #! /usr/bin/env bash
 # shellcheck source=/dev/null
 
-source "RAGFunções.sh";
+source "RAGFunções.sh"
 
 KDE_APP_INSTALL=(
     wget
     nano
     plasma-desktop
     plasma-wayland-session
-    plasma-nm 
+    plasma-nm
     plasma-framework
-    ffmpegthumbnailer
-    ffmpegthumbs 
     plasma-pa
+    plasma-framework
     kate
     gwenview
     kscreen
-    powerdevil 
-    noto-fonts-emoji 
-    sddm 
-    tilix 
-    dolphin 
-    dolphin-plugins 
-    spectacle 
-    plasma-integration 
-    plasma-workspace 
-    kded 
-    kwayland 
-    kwayland-integration 
-    systemsettings 
-    plasma-workspace-wallpapers  
-    ntfs-3g 
-    ark 
-    ffmpeg 
-    gst-plugins-ugly 
-    gst-plugins-good 
-    gst-plugins-base 
-    gst-plugins-bad 
-    gst-libav 
-    gstreamer 
-    btrfs-progs 
-    kio-gdrive 
-    neofetch 
-    htop 
-    ark 
-    grub-customizer 
-    gufw 
-    fwupd 
-    xorg-server 
-    xorg-xinit 
-    xorg-apps 
+    powerdevil
+    sddm
+    dolphin
+    dolphin-plugins
+    noto-fonts-emoji
+    fmpegthumbnailer
+    ffmpegthumbs
+    tilix
+    spectacle
+    plasma-integration
+    plasma-workspace
+    kded
+    kwayland
+    kwayland-integration
+    systemsettings
+    plasma-workspace-wallpapers
+    ntfs-3g
+    ark
+    ffmpeg
+    gst-plugins-ugly
+    gst-plugins-good
+    gst-plugins-base
+    gst-plugins-bad
+    gst-libav
+    gstreamer
+    btrfs-progs
+    kio-gdrive
+    neofetch
+    htop
+    ark
+    grub-customizer
+    gufw
+    fwupd
+    xorg-server
+    xorg-xinit
+    xorg-apps
     mesa
-    zsh 
+    zsh
     zsh-completions
-    base-devel 
+    base-devel
     git
-    plasma-framework 
-    gst-libav 
-    base-devel   
-    qt5-webchannel 
-    vulkan-headers 
-    pulseaudio 
+    gst-libav
+    base-devel
+    qt5-webchannel
+    vulkan-headers
+    pulseaudio
     alsa-utils
+    pulseaudio-bluetooth
 )
 
 CINNAMON_APP_INSTALL=(
@@ -78,6 +79,7 @@ CINNAMON_APP_INSTALL=(
     gnome-screenshot
     gvfs
     file-roller
+    pulseaudio-bluetooth
 )
 XFCE_APP_INSTALL=(
     xfce4
@@ -94,6 +96,7 @@ XFCE_APP_INSTALL=(
     gvfs
     evince
     mousepad
+    pulseaudio-bluetooth
 )
 GNOME_APP_INSTALL=(
     gnome
@@ -118,24 +121,50 @@ GNOME_APP_INSTALL=(
     pulseaudio
 )
 
-function instalar_pacotes() {
-    local lista_pacotes=("$@")
-    
-    if [ ${#lista_pacotes[@]} -eq 0 ]; then
-        echo -e "${VERDE}[ERRO] - Nenhuma lista de pacotes fornecida.${SEM_COR}"
-        return 1
-    fi
-
-    echo -e "${VERDE}[INFO] - Instalando programas essenciais usando o pacman...${SEM_COR}"
-
-    for pacote in "${lista_pacotes[@]}"; do
-        if ! pacman -Q | grep -q "$pacote"; then  
-            sudo pacman -S "$pacote" --noconfirm
-        else 
-            echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado.${SEM_COR}"
-        fi
-    done
-}
+I3WM_APP_INSTALL=(
+    i3-wm
+    i3lock
+    i3status
+        tilix
+    spectacle
+    plasma-integration
+    plasma-workspace
+    kded
+    kwayland
+    kwayland-integration
+    systemsettings
+    plasma-workspace-wallpapers
+    ntfs-3g
+    ark
+    ffmpeg
+    gst-plugins-ugly
+    gst-plugins-good
+    gst-plugins-base
+    gst-plugins-bad
+    gst-libav
+    gstreamer
+    btrfs-progs
+    kio-gdrive
+    neofetch
+    htop
+    ark
+    grub-customizer
+    gufw
+    fwupd
+    xorg-server
+    xorg-xinit
+    xorg-apps
+    mesa
+    base-devel
+    git
+    gst-libav
+    base-devel
+    qt5-webchannel
+    vulkan-headers
+    pulseaudio
+    alsa-utils
+    pulseaudio-bluetooth
+)
 
 # Escolher qual ambiente de desktop instalar usando a instrução case
 function escolher_interface() {
@@ -144,21 +173,29 @@ function escolher_interface() {
     echo "2) GNOME"
     echo "3) XFCE"
     echo "4) Cinnamon"
+    echo "5) I3wm manager"
+
     read -p "Digite o número da interface desejada: " opcao
 
     case $opcao in
-        1) instalar_pacotes "${KDE_APP_INSTALL[@]}";;
-        2) instalar_pacotes "${GNOME_APP_INSTALL[@]}";;
-        3) instalar_pacotes "${XFCE_APP_INSTALL[@]}";;
-        4) instalar_pacotes "${CINNAMON_APP_INSTALL[@]}";;
-        *) echo -e "${VERDE}[ERRO] - Opção inválida. Nenhuma interface será instalada.${SEM_COR}";;
+    1) instalar_pacotes "${KDE_APP_INSTALL[@]}" 
+    ;;
+    2) instalar_pacotes "${GNOME_APP_INSTALL[@]}"
+     ;;
+    3) instalar_pacotes "${XFCE_APP_INSTALL[@]}" 
+    ;;
+    4) instalar_pacotes "${CINNAMON_APP_INSTALL[@]}"
+     ;;
+    5) instalar_pacotes "${I3WM_APP_INSTALL[@]}"
+    ;;
+    *) echo -e "${VERDE}[ERRO] - Opção inválida. Nenhuma interface será instalada.${SEM_COR}" ;;
     esac
 }
 
 # Função para instalar pacotes usando o gerenciador de pacotes pacman
 function instalar_pacotes() {
     local lista_pacotes=("$@")
-    
+
     if [ ${#lista_pacotes[@]} -eq 0 ]; then
         echo -e "${VERDE}[ERRO] - Nenhuma lista de pacotes fornecida.${SEM_COR}"
         return 1
@@ -167,9 +204,9 @@ function instalar_pacotes() {
     echo -e "${VERDE}[INFO] - Instalando programas essenciais usando o pacman...${SEM_COR}"
 
     for pacote in "${lista_pacotes[@]}"; do
-        if ! pacman -Q | grep -q "$pacote"; then  
+        if ! pacman -Q | grep -q "$pacote"; then
             sudo pacman -S "$pacote" --noconfirm
-        else 
+        else
             echo -e "${VERDE}[INFO] - O pacote $pacote já está instalado.${SEM_COR}"
         fi
     done
@@ -182,14 +219,16 @@ function escolher_interface() {
     echo "2) GNOME"
     echo "3) XFCE"
     echo "4) Cinnamon"
+    echo "5) I3wm Manager"
+
     read -p "Digite o número da interface desejada: " opcao
 
     case $opcao in
-        1) instalar_pacotes "${KDE_APP_INSTALL[@]}";;
-        2) instalar_pacotes "${GNOME_APP_INSTALL[@]}";;
-        3) instalar_pacotes "${XFCE_APP_INSTALL[@]}";;
-        4) instalar_pacotes "${CINNAMON_APP_INSTALL[@]}";;
-        *) echo -e "${VERDE}[ERRO] - Opção inválida. Nenhuma interface será instalada.${SEM_COR}";;
+    1) instalar_pacotes "${KDE_APP_INSTALL[@]}" ;;
+    2) instalar_pacotes "${GNOME_APP_INSTALL[@]}" ;;
+    3) instalar_pacotes "${XFCE_APP_INSTALL[@]}" ;;
+    4) instalar_pacotes "${CINNAMON_APP_INSTALL[@]}" ;;
+    5) instalar_pacotes "${I3WM_APP_INSTALL[@]}" ;;
+    *) echo -e "${VERDE}[ERRO] - Opção inválida. Nenhuma interface será instalada.${SEM_COR}" ;;
     esac
 }
-

@@ -18,6 +18,7 @@ YAY_APP_INSTALL=(
     whatsapp-for-linux-git
     piper
     portmaster-stub-bin
+    
 )
 
 # Função para verificar se um pacote está instalado usando o yay

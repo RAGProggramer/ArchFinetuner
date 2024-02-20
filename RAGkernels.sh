@@ -3,14 +3,10 @@
 source "RAGFunções.sh";
 
 declare -A kernels=(
-    [1]="linux-xanmod"
-    [2]="linux-xanmod-headers"
-    [3]="linux-lts"
-    [4]="linux-lts-headers"
-    [5]="linux"
-    [6]="linux-headers"
-    [7]="linux-cachyos"
-    [8]="linux-cachyos-headers"
+    [1]="linux-xanmod linux-xanmod-headers"
+    [2]="linux-lts linux-lts-headers"
+    [3]="linux linux-headers"
+    [4]="linux-cachyos linux-cachyos-headers"
     # Adicione mais opções de kernels aqui, se desejar
 )
 
@@ -33,7 +29,7 @@ instalar_kernel() {
     fi
 }
 atualizar_grub() {
-    grub-mkconfig -o /boot/grub/grub.cfg
+   sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
 IntallKernels() {

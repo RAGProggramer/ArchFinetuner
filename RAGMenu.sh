@@ -21,6 +21,7 @@ Menu() {
     echo "9) Instalar Navegador"
     echo "10) Escolher Interface"
     echo "11) Instalar Kernels"
+    echo "12) Instalar programas padrao"
     echo "q) Sair"
 
     read -rp "Escolha uma opção: " opcao
