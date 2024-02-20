@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 # shellcheck source=/dev/null
 # Importação de arquivos de funções e menu#
-source RAGFunções.sh;
-source RAGMenu.sh;
+source ArchFinetunerFunções.sh;
+source ArchFinetunerMenu.sh;
 ################################################################################
 # Nome do Scipt: RAG INSTALL APP
 # Autor: Gabriel Aguiar Rocha

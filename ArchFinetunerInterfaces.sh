@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 # shellcheck source=/dev/null
 
-source "RAGFunções.sh"
+source "ArchFinetunerFunções.sh"
 
 KDE_APP_INSTALL=(
     wget

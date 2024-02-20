@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 # shellcheck source=/dev/null
-source "RAGFunções.sh";
+source "ArchFinetunerFunções.sh";
 
 declare -A kernels=(
     [1]="linux-xanmod linux-xanmod-headers"

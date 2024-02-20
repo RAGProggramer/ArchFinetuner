@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # shellcheck source=/dev/null
-source "RAGFunções.sh";
-source "RAGkernels.sh";
-source "RAGYAYPKG.sh";
-source "RAGInterfaceINS.sh";
+source "ArchFinetunerFunções.sh";
+source "ArchFinetunerKernells.sh";
+source "ArchFinetunerYAYPKG.sh";
+source "ArchFinetunerInterfaces.sh";
 
 funcoes=(
     instalar_paru
