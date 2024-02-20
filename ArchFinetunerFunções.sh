@@ -341,9 +341,7 @@ instalarNavegador() {
         ;;
     esac
 }
-
-Install_wallpaerEngine{
-    Install_wallpaperEngine() {
+Install_wallpaperEngine() {
     # Download source
     echo "Clonando o repositório..."
     git clone https://github.com/catsout/wallpaper-engine-kde-plugin.git || { echo "Erro ao clonar o repositório."; return 1; }
@@ -403,8 +401,7 @@ show_loading() {
 show_loading "Instalando Wallpaper Engine"
 
 }
-
-    installWallpaperEngine{
+installWallpaperEngine(){
     for programa in "${WALLPAERS_PACOTES_INSTALL[@]}"; do
         if ! pacman -Qq "$programa" &>/dev/null; then
             echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}"
