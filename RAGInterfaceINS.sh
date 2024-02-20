@@ -125,7 +125,7 @@ I3WM_APP_INSTALL=(
     i3-wm
     i3lock
     i3status
-        tilix
+    tilix
     spectacle
     plasma-integration
     plasma-workspace
