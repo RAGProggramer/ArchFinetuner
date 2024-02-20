@@ -298,7 +298,7 @@ grubtheme() {
         sudo python3 dedsec-theme.py --install
     fi
 }
-port DIR="$HOME/.cache/RAGlog"
+
 ativaservicos() {
     echo -e "${VERDE}[INFO] - ativando alguns serviçoes essenciais e reiniciando o sistema.${SEM_COR}"
     sudo systemctl enable NetworkManager sddm bluetooth.service
