@@ -112,7 +112,6 @@ GNOME_APP_INSTALL=(
     gedit
     gnome-software
     file-roller
-    eog
     gnome-screenshot
     gnome-disk-utility
     gnome-keyring

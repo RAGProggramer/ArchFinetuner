@@ -6,6 +6,23 @@ source "RAGkernels.sh";
 source "RAGYAYPKG.sh";
 source "RAGInterfaceINS.sh";
 
+funcoes=(
+    instalar_paru
+    instalar_yay
+    ADDrepoChaotic
+    driversGraficos
+    criarchavegpg
+    zsheplugins
+    grubtheme
+    ativaservicos
+    instalarNavegador
+    escolher_interface
+    IntallKernels
+    install_or_skip_package
+    installWallpaperEngine
+)
+
+
 Menu() {
   while true; do
     clear
@@ -22,6 +39,8 @@ Menu() {
     echo "10) Escolher Interface"
     echo "11) Instalar Kernels"
     echo "12) Instalar programas padrao"
+    echo "13) Instalar Walpaper Engine do KDE";
+
     echo "q) Sair"
 
     read -rp "Escolha uma opção: " opcao
@@ -62,6 +81,20 @@ Menu() {
         ;;
         12)
         install_or_skip_package
+        ;;
+        13)
+        installWallpaperEngine
+        ;;
+        14)
+       # Loop sobre cada função e solicitação de confirmação para executá-la
+    for funcao in "${funcoes[@]}"; do
+    read -p "Tem certeza que deseja executar $funcao? (Digite 's' para sim, 'n' para não): " resposta
+    if [ "$resposta" = "s" ]; then
+        "$funcao"
+    else
+        echo "Função $funcao ignorada."
+    fi
+done
         ;;
       q)
         echo "Saindo..."

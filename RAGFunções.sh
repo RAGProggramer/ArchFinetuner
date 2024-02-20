@@ -27,6 +27,20 @@ PAC=(
     zsh-completions
 )
 
+WALLPAERS_PACOTES_INSTALL=(
+    extra-cmake-modules 
+    plasma-framework
+    gst-libav 
+    base-devel
+    mpv
+    python-websockets 
+    qt5-declarative
+    qt5-websockets
+    qt5-webchannel
+    vulkan-headers 
+    cmake
+)
+
 VERMELHO='\e[1;91m'
 VERDE='\e[1;92m'
 SEM_COR='\e[0m'
@@ -326,4 +340,89 @@ instalarNavegador() {
         echo "Opção inválida. Saindo do menu."
         ;;
     esac
+}
+
+Install_wallpaerEngine{
+    Install_wallpaperEngine() {
+    # Download source
+    echo "Clonando o repositório..."
+    git clone https://github.com/catsout/wallpaper-engine-kde-plugin.git || { echo "Erro ao clonar o repositório."; return 1; }
+
+    # Entrar no diretório clonado
+    cd wallpaper-engine-kde-plugin || { echo "Erro ao acessar o diretório clonado."; return 1; }
+
+    # Baixar submódulo (glslang)
+    echo "Baixando submódulo..."
+    git submodule update --init || { echo "Erro ao baixar o submódulo."; return 1; }
+
+    # Configurar
+    echo "Configurando..."
+    mkdir -p build && cd build || { echo "Erro ao criar o diretório de compilação."; return 1; }
+    cmake .. -DUSE_PLASMAPKG=ON || { echo "Erro ao configurar."; return 1; }
+
+    # Compilar
+    echo "Compilando..."
+    make -j"$nproc" || { echo "Erro ao compilar."; return 1; }
+
+    # Instalar pacote
+    echo "Instalando pacote..."
+    make install_pkg || { echo "Erro ao instalar o pacote."; return 1; }
+    # Instalar lib
+    echo "Instalando biblioteca..."
+    sudo make install || { echo "Erro ao instalar a biblioteca."; return 1; }
+
+    # Clonar e inicializar submódulo
+    cd ../src/backend_scene/standalone_view || { echo "Erro ao acessar o diretório."; return 1; }
+    mkdir -p build && cd build || { echo "Erro ao criar o diretório de compilação."; return 1; }
+    echo "Configurando..."
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_QML=ON || { echo "Erro ao configurar."; return 1; }
+    echo "Compilando..."
+    make -j"$nproc" || { echo "Erro ao compilar."; return 1; }
+
+    # Exibir ajuda
+    echo "Executando..."
+    ./sceneviewer --help || { echo "Erro ao executar."; return 1; }
+
+    return 0
+}
+
+show_loading() {
+    local message=$1
+    local spin_chars="/-\|"
+
+    echo -n "$message "
+    for ((i = 0; i < 15; i++)); do
+        echo -n "${spin_chars:i%4:1}"
+        sleep 0.1
+        echo -ne "\b"
+    done
+    echo " Concluído!"
+}
+
+# Exemplo de uso
+show_loading "Instalando Wallpaper Engine"
+
+}
+
+    installWallpaperEngine{
+    for programa in "${WALLPAERS_PACOTES_INSTALL[@]}"; do
+        if ! pacman -Qq "$programa" &>/dev/null; then
+            echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}"
+            sudo pacman -S "$programa" --noconfirm || {
+                echo -e "${VERMELHO}[ERRO] - Falha ao instalar o pacote $programa.${SEM_COR}"
+                pacotes_com_falha+=("$programa")
+            }
+        else
+            echo -e "${VERDE}[INFO] - O pacote $programa já está instalado.${SEM_COR}"
+        fi
+    done
+
+    if [ ${#pacotes_com_falha[@]} -gt 0 ]; then
+        echo -e "${VERMELHO}[ERRO] - Falha ao instalar os seguintes pacotes: ${pacotes_com_falha[*]}.${SEM_COR}"
+        return 1
+    fi
+
+    echo -e "${VERDE}[INFO] - Todos os pacotes foram instalados ou já estão presentes.${SEM_COR}"
+    return 0
+    Install_wallpaperEngine;
 }
