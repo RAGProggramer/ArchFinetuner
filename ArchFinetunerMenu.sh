@@ -40,6 +40,7 @@ Menu() {
     echo "11) Instalar Kernels"
     echo "12) Instalar programas padrao"
     echo "13) Instalar Walpaper Engine do KDE";
+    echo "14) Rodar Tudo";
 
     echo "q) Sair"
 
