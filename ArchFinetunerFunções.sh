@@ -384,24 +384,12 @@ Install_wallpaperEngine() {
     return 0
 }
 
-show_loading() {
-    local message=$1
-    local spin_chars="/-\|"
-
-    echo -n "$message "
-    for ((i = 0; i < 15; i++)); do
-        echo -n "${spin_chars:i%4:1}"
-        sleep 0.1
-        echo -ne "\b"
-    done
-    echo " Concluído!"
-}
-
 # Exemplo de uso
-show_loading "Instalando Wallpaper Engine"
 
-}
+
 installWallpaperEngine(){
+    show_loading "Instalando Wallpaper Engine"
+
     for programa in "${WALLPAERS_PACOTES_INSTALL[@]}"; do
         if ! pacman -Qq "$programa" &>/dev/null; then
             echo -e "${VERDE}[INFO] - Instalando $programa... ${SEM_COR}"
@@ -421,5 +409,5 @@ installWallpaperEngine(){
 
     echo -e "${VERDE}[INFO] - Todos os pacotes foram instalados ou já estão presentes.${SEM_COR}"
     return 0
-    Install_wallpaperEngine;
+    Install_wallpaperEngine
 }

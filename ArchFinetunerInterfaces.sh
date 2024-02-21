@@ -187,7 +187,8 @@ function escolher_interface() {
      ;;
     5) instalar_pacotes "${I3WM_APP_INSTALL[@]}"
     ;;
-    *) echo -e "${VERDE}[ERRO] - Opção inválida. Nenhuma interface será instalada.${SEM_COR}" ;;
+    *) echo -e "${VERDE}[ERRO] - Opção inválida. Nenhuma interface será instalada.${SEM_COR}" 
+    ;;
     esac
 }
 
